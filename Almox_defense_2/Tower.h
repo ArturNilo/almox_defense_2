@@ -2,13 +2,17 @@
 #define TOWER_H
 
 #include <QGraphicsPixmapItem>
-#include <QGraphicsPolygonItem>
+#include <QGraphicsEllipseItem>
 #include <QGraphicsItem>
 
 class Tower: public QGraphicsPixmapItem{
 public:
     Tower(QGraphicsItem * parent=0);
 private:
-    QGraphicsPolygonItem * attack_area;
+    float x;
+    float y;
+    float radius_mult;
+    QGraphicsEllipseItem * attack_area;
+
 };
 #endif // TOWER_H
