@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>tex/16.png</file>
+    </qresource>
+</RCC>
