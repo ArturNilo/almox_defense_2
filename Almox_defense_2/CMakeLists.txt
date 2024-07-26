@@ -31,6 +31,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Game.h
         Game.cpp
         res.qrc
+        Tutorial.h
+        Tutorial.cpp
+        Bullet.h
+        Bullet.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Almox_defense_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
