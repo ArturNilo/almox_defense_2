@@ -24,7 +24,7 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
 
     //connect a timer to attack_target
     QTimer * timer = new QTimer();
-    connect(timer,SIGNAL(timeout()),this,SLOT(attack_target()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(aquire_target()));
     timer->start(1000);
 
     // set attack_dest
@@ -37,7 +37,7 @@ double Tower::dist_to(QGraphicsItem *item)
     return ln.length();
 }
 
-void Tower::attack_target()
+void Tower::fire()
 {
     Bullet * bullet = new Bullet();
     bullet->setPos(center_r.x(), center_r.y());
@@ -76,4 +76,5 @@ void Tower::aquire_target()
         }
     }
     attack_dest = closest_pt;
+    fire();
 }
