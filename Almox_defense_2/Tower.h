@@ -11,8 +11,10 @@ class Tower:public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Tower(QGraphicsItem * parent=0);
+    double dist_to(QGraphicsItem * item);
 public slots:
     void attack_target();
+    void aquire_target();
 private:
     float x;
     float y;
@@ -20,5 +22,6 @@ private:
     QGraphicsEllipseItem * attack_area;
     QPointF attack_dest;
     QPointF center_r;
+    bool has_target;
 };
 #endif // TOWER_H

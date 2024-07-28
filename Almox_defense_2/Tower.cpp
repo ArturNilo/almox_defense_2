@@ -1,12 +1,13 @@
 #include "Tower.h"
 #include "Game.h"
+#include "Bullet.h"
+#include "Enemy.h"
 #include <QPixmap>
 #include <QVector>
 #include <QPointF>
 #include <QLineF>
 #include <QTimer>
 #include <QGraphicsEllipseItem>
-#include "Bullet.h"
 #include <qmath.h>
 
 extern Game * game;
@@ -30,6 +31,12 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     attack_dest = QPointF(400,300);
 }
 
+double Tower::dist_to(QGraphicsItem *item)
+{
+    QLineF ln(pos(), item->pos());
+    return ln.length();
+}
+
 void Tower::attack_target()
 {
     Bullet * bullet = new Bullet();
@@ -40,4 +47,33 @@ void Tower::attack_target()
     bullet->setRotation(angle);
     setRotation(angle);
     game->scene->addItem(bullet);
+}
+
+void Tower::aquire_target()
+{
+    QList<QGraphicsItem *> colliding_items = attack_area->collidingItems();
+
+    if (colliding_items.size() == 1)
+    {
+        has_target = false;
+        return;
+    }
+
+    double closest_dist = 300;
+    QPointF closest_pt = QPointF(0,0);
+
+    for (size_t i = 0, n = colliding_items.size(); i<n; i++)
+    {
+        Enemy * enemy =  dynamic_cast<Enemy *>(colliding_items[i]);
+        if (enemy){
+            double dist = dist_to(enemy);
+            if(dist < closest_dist)
+            {
+                closest_dist = dist;
+                closest_pt = colliding_items[i]->pos();
+                has_target = true;
+            }
+        }
+    }
+    attack_dest = closest_pt;
 }
