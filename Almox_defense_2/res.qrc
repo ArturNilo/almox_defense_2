@@ -2,5 +2,6 @@
     <qresource prefix="/images">
         <file>tex/16.png</file>
         <file>tex/41.png</file>
+        <file>tex/7.png</file>
     </qresource>
 </RCC>
