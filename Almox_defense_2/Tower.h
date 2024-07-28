@@ -12,8 +12,8 @@ class Tower:public QObject, public QGraphicsPixmapItem{
 public:
     Tower(QGraphicsItem * parent=0);
     double dist_to(QGraphicsItem * item);
+    void fire();
 public slots:
-    void attack_target();
     void aquire_target();
 private:
     float x;
