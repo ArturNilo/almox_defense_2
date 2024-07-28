@@ -5,21 +5,24 @@
 #include "Enemy.h"
 
 
-Game::Game()
+Game::Game(): QGraphicsView()
 {
     // Create a scene
     scene = new QGraphicsScene(this);
+    scene->setSceneRect(0,0,1280,720);
 
     setScene(scene);
+
+    setFixedSize(1280,720);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
 
     // Criar torreta
     Tower * t = new Tower();
 
     scene->addItem(t);
 
-    setFixedSize(1200,800);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Criar inimigo teste
     Enemy * enemy = new Enemy();
