@@ -8,11 +8,11 @@ Bullet::Bullet(QGraphicsItem *parent){
 
     QTimer * move_timer = new QTimer(this);
     connect(move_timer,SIGNAL(timeout()),this, SLOT(move()));
-    move_timer->start(50);
+    move_timer->start(1);
 }
 
 void::Bullet::move(){
-    int STEP_SIZE = 30;
+    int STEP_SIZE = 1;
     int theta = rotation();
 
     double dx = STEP_SIZE * qSin(qDegreesToRadians(theta));

@@ -7,14 +7,14 @@ Enemy::Enemy(QGraphicsItem *parent)
 {
     setPixmap(QPixmap(":/images/tex/7.png"));
 
-    points << QPoint(200,200) << QPoint(400,200);
+    points << QPoint(200,200) << QPoint(200,400) << QPoint(400,400);
     point_index = 0;
     dest = points[0];
     rotate_to_point(dest);
 
     QTimer * timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move_forward()));
-    timer->start(150);
+    timer->start(10);
 }
 
 void Enemy::rotate_to_point(QPointF p)
@@ -26,7 +26,7 @@ void Enemy::rotate_to_point(QPointF p)
 void Enemy::move_forward()
 {
     QLineF ln(pos(),dest);
-    if (ln.length() < 5){
+    if (ln.length() < 1){
         point_index++;
         if (point_index >= points.size()){
             return;
@@ -35,7 +35,7 @@ void Enemy::move_forward()
         rotate_to_point(dest);
     }
 
-    int STEP_SIZE = 5;
+    int STEP_SIZE = 1;
     int theta = rotation();
 
     double dx = STEP_SIZE * qSin(qDegreesToRadians(theta));

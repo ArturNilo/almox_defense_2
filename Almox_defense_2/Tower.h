@@ -19,6 +19,7 @@ private:
     float x;
     float y;
     float radius_mult;
+    int attack_rate;
     QGraphicsEllipseItem * attack_area;
     QPointF attack_dest;
     QPointF center_r;

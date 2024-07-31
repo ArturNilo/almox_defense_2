@@ -16,16 +16,18 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     setPixmap(QPixmap(":/images/tex/16.png"));
 
     radius_mult = 4;
+    attack_rate = 100;
 
     QPointF center_r(25-radius_mult*25, 25-radius_mult*25);
 
     // Deifine real pixmap center based on radius multiplier
     attack_area = new QGraphicsEllipseItem(center_r.x(), center_r.y(), 50*radius_mult, 50*radius_mult, this);
+    attack_area->setPen(QPen(Qt::DotLine));
 
     //connect a timer to attack_target
     QTimer * timer = new QTimer();
     connect(timer,SIGNAL(timeout()),this,SLOT(aquire_target()));
-    timer->start(1000);
+    timer->start(attack_rate);
 
     // set attack_dest
     attack_dest = QPointF(400,300);
