@@ -22,11 +22,14 @@ Game::Game(): QGraphicsView()
     Tower * t = new Tower();
 
     scene->addItem(t);
+    t->setPos(200,200);
+
 
 
     // Criar inimigo teste
     Enemy * enemy = new Enemy();
     scene->addItem(enemy);
+    enemy->setPos(120, 120);
 
 }
 

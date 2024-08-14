@@ -18,10 +18,11 @@ public slots:
 private:
     float x;
     float y;
-    float radius_mult;
+    float radius;
     int attack_rate;
     QGraphicsEllipseItem * attack_area;
     QPointF attack_dest;
+    QPointF center_pixmap;
     QPointF center_r;
     bool has_target;
 };

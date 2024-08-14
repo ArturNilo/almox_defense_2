@@ -17,6 +17,7 @@ public slots:
 private:
     QList<QPointF> points;
     QPointF dest;
+    QLineF dist_to;
     int point_index;
 
 };

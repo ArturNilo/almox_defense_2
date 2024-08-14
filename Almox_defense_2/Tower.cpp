@@ -15,40 +15,53 @@ extern Game * game;
 Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     setPixmap(QPixmap(":/images/tex/16.png"));
 
-    radius_mult = 4;
-    attack_rate = 100;
+    radius = 400;
+    attack_rate = 1000;
 
-    QPointF center_r(25-radius_mult*25, 25-radius_mult*25);
+    // Calcula o centro do pixmap
+    center_pixmap = QPointF(boundingRect().width()/2, boundingRect().height()/2);
 
-    // Deifine real pixmap center based on radius multiplier
-    attack_area = new QGraphicsEllipseItem(center_r.x(), center_r.y(), 50*radius_mult, 50*radius_mult, this);
+    // Define o ponto de origem da transformação no centro do pixmap
+    setTransformOriginPoint(center_pixmap);
+
+    // Define a área de ataque centralizada no centro do pixmap
+    attack_area = new QGraphicsEllipseItem(-radius/2, -radius/2, radius, radius, this);
+    attack_area->setPos(center_pixmap);
     attack_area->setPen(QPen(Qt::DotLine));
 
-    //connect a timer to attack_target
+    // Conectar um temporizador para atacar o alvo
     QTimer * timer = new QTimer();
-    connect(timer,SIGNAL(timeout()),this,SLOT(aquire_target()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(aquire_target()));
+
     timer->start(attack_rate);
 
-    // set attack_dest
-    attack_dest = QPointF(400,300);
+    // Define o destino de ataque
+    //attack_dest = QPointF(400, 300);
+}
+
+void Tower::fire()
+{
+    // Cria o projétil
+    Bullet * bullet = new Bullet();
+
+    // Converte a posição central do QPixmap para as coordenadas globais da cena
+    //QPointF tower_center_scene = mapToScene(center_pixmap);
+
+    bullet->setPos(pos());
+    QLineF ln(pos(), attack_dest);
+    int angle = -1 * ln.angle();
+    bullet->setRotation(angle);
+
+    // Ajusta a rotação da torre em torno de seu centro
+    setRotation(angle);
+
+    game->scene->addItem(bullet);
 }
 
 double Tower::dist_to(QGraphicsItem *item)
 {
     QLineF ln(pos(), item->pos());
     return ln.length();
-}
-
-void Tower::fire()
-{
-    Bullet * bullet = new Bullet();
-    bullet->setPos(center_r.x(), center_r.y());
-
-    QLineF ln(center_r, attack_dest);
-    int angle = -1 * ln.angle();
-    bullet->setRotation(angle);
-    setRotation(angle);
-    game->scene->addItem(bullet);
 }
 
 void Tower::aquire_target()
@@ -58,7 +71,6 @@ void Tower::aquire_target()
     if (colliding_items.size() == 1)
     {
         has_target = false;
-        return;
     }
 
     double closest_dist = 300;
@@ -73,10 +85,12 @@ void Tower::aquire_target()
             {
                 closest_dist = dist;
                 closest_pt = colliding_items[i]->pos();
+                attack_dest = closest_pt;
                 has_target = true;
+                fire();
             }
         }
+        else{has_target = false;}
+
     }
-    attack_dest = closest_pt;
-    fire();
 }
