@@ -13,12 +13,16 @@ Enemy::Enemy(QGraphicsItem *parent)
     // Define a origem de transformação para o centro do pixmap
     setTransformOriginPoint(boundingRect().width()/2, boundingRect().height()/2);
 
+    life = 10;
+    is_dead = false;
     // Opcional: centralizar o objeto no ponto inicial
 
     points << QPoint(200,200) << QPoint(200,400) << QPoint(400,400) << QPoint(400,200);
     point_index = 0;
     dest = points[0];
     rotate_to_point(dest);
+
+
 
     QTimer * timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(move_forward()));
@@ -51,4 +55,9 @@ void Enemy::move_forward()
 
 
     setPos(x() + dx, y() + dy);
+}
+
+void Enemy::take_damage(int dmg){
+    life = life - dmg;
+    if (life <= 0) {is_dead = true;}
 }

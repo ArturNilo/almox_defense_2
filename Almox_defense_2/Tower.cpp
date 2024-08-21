@@ -15,8 +15,9 @@ extern Game * game;
 Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     setPixmap(QPixmap(":/images/tex/16.png"));
 
-    radius = 400;
+    radius = 200;
     attack_rate = 1000;
+    damage = 2;
 
     // Calcula o centro do pixmap
     center_pixmap = QPointF(boundingRect().width()/2, boundingRect().height()/2);
@@ -25,14 +26,13 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     setTransformOriginPoint(center_pixmap);
 
     // Define a área de ataque centralizada no centro do pixmap
-    attack_area = new QGraphicsEllipseItem(-radius/2, -radius/2, radius, radius, this);
+    attack_area = new QGraphicsEllipseItem(-radius, -radius, radius*2, radius*2, this);
     attack_area->setPos(center_pixmap);
     attack_area->setPen(QPen(Qt::DotLine));
 
     // Conectar um temporizador para atacar o alvo
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(aquire_target()));
-
     timer->start(attack_rate);
 
     // Define o destino de ataque
@@ -48,6 +48,8 @@ void Tower::fire()
     //QPointF tower_center_scene = mapToScene(center_pixmap);
 
     bullet->setPos(pos());
+    bullet->setMaxRange(radius);
+    bullet->setDamage(damage);
     QLineF ln(pos(), attack_dest);
     int angle = -1 * ln.angle();
     bullet->setRotation(angle);

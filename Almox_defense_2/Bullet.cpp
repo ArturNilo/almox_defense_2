@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "Enemy.h"
 #include <QPixmap>
 #include <QTimer>
 #include <qmath.h>
@@ -26,6 +27,24 @@ void Bullet::move(){
     double dx = STEP_SIZE * qCos(qDegreesToRadians(theta));
 
     setPos(x()+dx, y()+dy);
+    distanceTravelled = distanceTravelled + STEP_SIZE;
+    if (distanceTravelled > maxRange)
+    {
+        delete this;
+    }
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+    for (int i = 0; i < colliding_items.size(); ++i) {
+        Enemy * enemy = dynamic_cast<Enemy *>(colliding_items[i]);
+        if (enemy) {
+            enemy->take_damage(damage);
+            if (enemy->is_dead) {
+                // Deleta ambos da memória
+                delete enemy;
+            }
+            delete this;
+            return;
+        }
+    }
 }
 
 double Bullet::getMaxRange(){
@@ -42,4 +61,8 @@ void Bullet::setMaxRange(double rng){
 
 void Bullet::setDistanceTravelled(double dist){
     distanceTravelled = dist;
+}
+
+void Bullet::setDamage(int dmg){
+    damage = dmg;
 }

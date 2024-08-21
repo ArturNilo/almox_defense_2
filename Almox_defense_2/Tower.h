@@ -20,6 +20,7 @@ private:
     float y;
     float radius;
     int attack_rate;
+    int damage;
     QGraphicsEllipseItem * attack_area;
     QPointF attack_dest;
     QPointF center_pixmap;

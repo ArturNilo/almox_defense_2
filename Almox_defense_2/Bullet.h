@@ -15,9 +15,11 @@ public slots:
     double getDistanceTravelled();
     void setMaxRange(double rng);
     void setDistanceTravelled(double dist);
+    void setDamage(int dmg);
 private:
     double maxRange;
     double distanceTravelled;
+    int damage;
 };
 
 #endif // BULLET_H
