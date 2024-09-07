@@ -13,5 +13,9 @@
         <file>tex/24.png</file>
         <file>tex/25.png</file>
         <file>tex/31.png</file>
+        <file>tex/0.png</file>
+        <file>tex/1.png</file>
+        <file>tex/2.png</file>
+        <file>tex/3.png</file>
     </qresource>
 </RCC>

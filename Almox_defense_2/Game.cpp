@@ -6,6 +6,7 @@
 
 Game::Game() : QGraphicsView()
 {
+    generateMap();
     // Create a scene
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 1280, 720);
@@ -86,4 +87,55 @@ void Game::mousePressEvent(QMouseEvent *event)
     Bullet *bullet = new Bullet();
     bullet->setPos(event->pos());
     scene->addItem(bullet);
+}
+
+void Game::generateMap()
+{
+    QPixmap mapGrid(":/images/tex/0.png");
+    QPixmap pathGrid1(":/images/tex/1.png");
+    QPixmap pathGrid2(":/images/tex/2.png");
+    QPixmap pathGrid3(":/images/tex/3.png");
+
+    int gridPixelSize = 48; //tamanho de cada parte do grid em pixels
+
+    int grid[10][20] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
+        {0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    };
+
+    for (int row = 0; row < 10; ++row) {
+        for (int col = 0; col < 20; ++col) {
+            QLabel *gridLabel = new QLabel(this);
+            QPixmap pixmap;
+
+            switch (grid[row][col]) {
+            case 1:
+                pixmap = pathGrid1;
+                break;
+            default:
+                pixmap = mapGrid;
+                break;
+            }
+            if (grid[row][col+1])
+            {
+                QTransform transform;
+                transform.rotate(90);
+                pixmap = pixmap.transformed(transform);
+            }
+            gridLabel->setPixmap(pixmap);
+            gridLabel->setScaledContents(true);
+            gridLabel->setFixedSize(gridPixelSize, gridPixelSize);
+            gridLabel->move(col * gridPixelSize, row * gridPixelSize);
+            gridLabel->show();
+        }
+    }
+
 }

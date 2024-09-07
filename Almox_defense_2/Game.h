@@ -18,6 +18,8 @@ private:
     QPushButton *BuyAcidTower;
     QLabel *OptionsLabel;
     QLabel *BottomLabel;
+private slots:
+    void generateMap();
 };
 
 #endif // GAME_H
