@@ -5,12 +5,13 @@
 #include <QObject>
 #include <QList>
 #include <QPointF>
+#include "Game.h"
 
 
 class Enemy: public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Enemy(QGraphicsItem *parent=0);
+    Enemy(Game *gameInstance, QGraphicsItem *parent = nullptr);
     void rotate_to_point(QPointF p);
     bool is_dead;
 public slots:

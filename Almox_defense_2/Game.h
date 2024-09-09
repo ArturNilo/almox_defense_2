@@ -12,6 +12,7 @@ class Game: public QGraphicsView{
 public:
     Game();
     QGraphicsScene * scene;
+    QVector<QPointF> pathPoints;
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -29,7 +30,6 @@ private:
     int currentPathPixmapIndex;  // Índice para controlar qual pixmap está sendo exibido
     int initColumn;
     int finalRow;
-    QPointF pathPoints[10][20];
     Tower *selectedTower;
 
     QPixmap mapGrid;

@@ -95,27 +95,6 @@ Game::Game() : QGraphicsView()
     OptionsLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
     bottomLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    // Criar torreta
-    Tower *t = new Tower();
-    scene->addItem(t);
-    t->setPos(200, 200);
-    t->setZValue(1);
-
-    Tower *t1 = new Tower();
-    scene->addItem(t1);
-    t1->setPos(400, 400);
-    t1->setZValue(3);
-
-    // Criar inimigo teste
-    Enemy *enemy = new Enemy();
-    scene->addItem(enemy);
-    enemy->setPos(120, 120);
-
-    Enemy *enemy1 = new Enemy();
-    scene->addItem(enemy1);
-    enemy1->setPos(10, 10);
-
-
     QTimer * timer = new QTimer();
     connect(BuyCapTower, &QPushButton::clicked, this, &Game::buyCapTower);
     connect(BuyResTower, &QPushButton::clicked, this, &Game::buyResTower);
@@ -129,6 +108,13 @@ Game::Game() : QGraphicsView()
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 
     setFocus();
+
+    // Criar inimigo teste
+    Enemy *enemy = new Enemy(this);
+    scene->addItem(enemy);
+
+    Enemy *enemy1 = new Enemy(this);
+    scene->addItem(enemy1);
 }
 
 
@@ -204,35 +190,55 @@ void Game::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void Game::generateMap() {
-    int rotation = 0;
+    pathPoints.clear();
+    QPoint start(2, 0); // Ponto inicial do caminho (linha 0, coluna 2)
+
+    // Algoritmo para rastrear o caminho na matriz e armazenar os pontos em ordem
+    QPoint current = start;
+    pathPoints.append(QPointF(current.x() * gridPixelSize, current.y() * gridPixelSize));
+
+    while (true) {
+        bool moved = false;
+
+        // Cima
+        if (current.y() > 0 && grid[current.y() - 1][current.x()] == 1 &&
+            !pathPoints.contains(QPointF(current.x() * gridPixelSize, (current.y() - 1) * gridPixelSize))) {
+            current.setY(current.y() - 1);
+            moved = true;
+        }
+        // Baixo
+        else if (current.y() < 9 && grid[current.y() + 1][current.x()] == 1 &&
+                 !pathPoints.contains(QPointF(current.x() * gridPixelSize, (current.y() + 1) * gridPixelSize))) {
+            current.setY(current.y() + 1);
+            moved = true;
+        }
+        // Esquerda
+        else if (current.x() > 0 && grid[current.y()][current.x() - 1] == 1 &&
+                 !pathPoints.contains(QPointF((current.x() - 1) * gridPixelSize, current.y() * gridPixelSize))) {
+            current.setX(current.x() - 1);
+            moved = true;
+        }
+        // Direita
+        else if (current.x() < 19 && grid[current.y()][current.x() + 1] == 1 &&
+                 !pathPoints.contains(QPointF((current.x() + 1) * gridPixelSize, current.y() * gridPixelSize))) {
+            current.setX(current.x() + 1);
+            moved = true;
+        }
+
+        if (moved) {
+            pathPoints.append(QPointF(current.x() * gridPixelSize, current.y() * gridPixelSize));
+        } else {
+            // Se não foi possível mover em nenhuma direção, significa que chegamos ao fim do caminho
+            break;
+        }
+    }
+
+    qDebug() << "Número de pontos no caminho:" << pathPoints.size();
+
+    // Restante do código para desenhar o mapa
     for (int row = 0; row < 10; row++) {
         for (int col = 0; col < 20; col++) {
-            QPixmap pixmap;
-            switch (grid[row][col]) {
-            case 1:
-                pixmap = pathGrid1;
-                pathSize++;
-                break;
-            default:
-                pixmap = mapGrid;
-                break;
-            }
-            // Aplicar rotação se necessário
-            if (col < 19 && !grid[row][col + 1]) {
-                if (row < 9 && grid[row + 1][col]) {
-                    rotation = 0;
-                } else {
-                    rotation = 180;
-                }
-            } else {
-                rotation = -90;
-            }
-
-            QTransform transform;
-            transform.rotate(rotation);
-            pixmap = pixmap.transformed(transform);
-
-            // Criar item de pixmap e adicionar à cena
+            QPixmap pixmap = (grid[row][col] == 1) ? pathGrid1 : mapGrid;
             QGraphicsPixmapItem* gridItem = new QGraphicsPixmapItem(pixmap);
             gridItem->setPos(col * gridPixelSize, row * gridPixelSize);
             gridItem->setZValue(-1);
@@ -241,6 +247,7 @@ void Game::generateMap() {
         }
     }
 }
+
 
 
 void Game::updatePathPixmap() {
