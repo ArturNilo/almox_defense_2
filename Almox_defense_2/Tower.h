@@ -4,27 +4,46 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsItem>
-#include <QPointF>
 #include <QObject>
+#include <QPointF>
 
-class Tower:public QObject, public QGraphicsPixmapItem{
+class Tower : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
-    Tower(QGraphicsItem * parent=0);
-    double dist_to(QGraphicsItem * item);
+    Tower(QGraphicsItem *parent = nullptr);
+
+    // Métodos públicos
+    double dist_to(QGraphicsItem *item) const;
     void fire();
+    void setRadius(float r);
+    void setAttackRate(int rate);
+    void setDamage(int dmg);
+
 public slots:
-    void aquire_target();
-private:
+
+
+
+protected:
+    // Membros protegidos acessíveis pelas subclasses
     float x;
     float y;
     float radius;
     int attack_rate;
     int damage;
-    QGraphicsEllipseItem * attack_area;
+    QTimer *attackTimer;
+    QGraphicsEllipseItem *attack_area;
     QPointF attack_dest;
     QPointF center_pixmap;
     QPointF center_r;
     bool has_target;
+
+    // Métodos protegidos
+    void rotate_to_point(QPointF p);
+    double dist_to(QGraphicsItem *item);
+    void acquire_target();
+
+private:
+         // Membros privados (não acessíveis diretamente pelas subclasses)
 };
+
 #endif // TOWER_H

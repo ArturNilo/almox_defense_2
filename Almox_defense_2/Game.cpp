@@ -1,6 +1,9 @@
 #include <QGraphicsScene>
 #include "Game.h"
 #include "Tower.h"
+#include "AcidTower.h"
+#include "CapTower.h"
+#include "ResTower.h"
 #include "Bullet.h"
 #include "Enemy.h"
 #include <QTimer>
@@ -123,10 +126,9 @@ void Game::buyCapTower() {
     if (selectedTower) {
         delete selectedTower;  // Limpar torre anterior, se houver
     }
-    selectedTower = new Tower();
+    selectedTower = new CapTower();
     scene->addItem(selectedTower);
 
-    // Posicionar a torre na posição inicial do mouse na cena
     QPointF scenePos = mapToScene(QCursor::pos());
     selectedTower->setPos(scenePos - QPointF(selectedTower->boundingRect().width() / 2, selectedTower->boundingRect().height() / 2));
     selectedTower->setZValue(1);
@@ -137,7 +139,7 @@ void Game::buyResTower() {
     if (selectedTower) {
         delete selectedTower;
     }
-    selectedTower = new Tower();
+    selectedTower = new ResTower();
     scene->addItem(selectedTower);
     QPointF scenePos = mapToScene(QCursor::pos());
     selectedTower->setPos(scenePos - QPointF(selectedTower->boundingRect().width() / 2, selectedTower->boundingRect().height() / 2));
@@ -148,7 +150,7 @@ void Game::buyAcidTower() {
     if (selectedTower) {
         delete selectedTower;
     }
-    selectedTower = new Tower();
+    selectedTower = new AcidTower();
     scene->addItem(selectedTower);
     QPointF scenePos = mapToScene(QCursor::pos());
     selectedTower->setPos(scenePos - QPointF(selectedTower->boundingRect().width() / 2, selectedTower->boundingRect().height() / 2));

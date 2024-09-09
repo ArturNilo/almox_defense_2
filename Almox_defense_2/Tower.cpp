@@ -68,7 +68,7 @@ double Tower::dist_to(QGraphicsItem *item)
     return ln.length();
 }
 
-void Tower::aquire_target()
+void Tower::acquire_target()
 {
     QList<QGraphicsItem *> colliding_items = attack_area->collidingItems();
 
