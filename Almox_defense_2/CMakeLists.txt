@@ -39,6 +39,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Enemy.cpp
         menu.h
         menu.cpp
+        CapTower.h
+        ResTower.h
+        AcidTower.h
+        ResTower.cpp
+        CapTower.cpp
+        AcidTower.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Almox_defense_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
