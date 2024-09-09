@@ -22,13 +22,14 @@ private:
     QPushButton *BuyAcidTower;
     QLabel *OptionsLabel;
     QLabel *BottomLabel;
+    QGraphicsPixmapItem* gridItems[10][20];
     int grid[10][20];
     int gridPixelSize;
     int pathSize;
     int currentPathPixmapIndex;  // Índice para controlar qual pixmap está sendo exibido
     int initColumn;
     int finalRow;
-    QLabel *gridLabels[10][20];  // Armazena as referências aos QLabel que representam o grid
+    QPointF pathPoints[10][20];
     Tower *selectedTower;
 
     QPixmap mapGrid;

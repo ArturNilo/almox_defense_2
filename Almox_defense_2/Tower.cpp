@@ -29,6 +29,7 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     attack_area = new QGraphicsEllipseItem(-radius, -radius, radius*2, radius*2, this);
     attack_area->setPos(center_pixmap);
     attack_area->setPen(QPen(Qt::DotLine));
+    attack_area->setOpacity(1);
 
     // Conectar um temporizador para atacar o alvo
     QTimer * timer = new QTimer();

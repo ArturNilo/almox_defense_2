@@ -120,7 +120,7 @@ Game::Game() : QGraphicsView()
     connect(BuyCapTower, &QPushButton::clicked, this, &Game::buyCapTower);
     connect(BuyResTower, &QPushButton::clicked, this, &Game::buyResTower);
     connect(BuyAcidTower, &QPushButton::clicked, this, &Game::buyAcidTower);
-    //connect(timer, &QTimer::timeout, this, &Game::updatePathPixmap);
+    connect(timer, &QTimer::timeout, this, &Game::updatePathPixmap);
     timer->start(200);
 
 
@@ -203,14 +203,11 @@ void Game::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-
 void Game::generateMap() {
     int rotation = 0;
-    int pathSize = 0;
     for (int row = 0; row < 10; row++) {
         for (int col = 0; col < 20; col++) {
             QPixmap pixmap;
-
             switch (grid[row][col]) {
             case 1:
                 pixmap = pathGrid1;
@@ -220,15 +217,14 @@ void Game::generateMap() {
                 pixmap = mapGrid;
                 break;
             }
-            if (col < 19 && !grid[row][col + 1]){
-                if (row < 9 && grid[row + 1][col]){
+            // Aplicar rotação se necessário
+            if (col < 19 && !grid[row][col + 1]) {
+                if (row < 9 && grid[row + 1][col]) {
                     rotation = 0;
-                }
-                else{
+                } else {
                     rotation = 180;
                 }
-            }
-            else{
+            } else {
                 rotation = -90;
             }
 
@@ -236,16 +232,18 @@ void Game::generateMap() {
             transform.rotate(rotation);
             pixmap = pixmap.transformed(transform);
 
+            // Criar item de pixmap e adicionar à cena
             QGraphicsPixmapItem* gridItem = new QGraphicsPixmapItem(pixmap);
             gridItem->setPos(col * gridPixelSize, row * gridPixelSize);
-            gridItem->setZValue(-1);  // Certifique-se de que o grid esteja atrás dos itens do jogo
+            gridItem->setZValue(-1);
             scene->addItem(gridItem);
+            gridItems[row][col] = gridItem;
         }
     }
 }
 
+
 void Game::updatePathPixmap() {
-    // Alterna entre os pixmaps pathGrid1, pathGrid2 e pathGrid3
     QPixmap newPixmap;
     switch (currentPathPixmapIndex) {
     case 1:
@@ -262,23 +260,26 @@ void Game::updatePathPixmap() {
         break;
     }
 
-    // Atualiza os QLabel com o novo pixmap
+    int index = 0;
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 20; ++col) {
             if (grid[row][col] == 1) {
-                // Atualiza o QLabel existente sem deletá-lo
                 QPixmap pixmap = newPixmap;
 
-                // Manter a rotação se o próximo item na linha for parte do caminho
-                if (col < 19 && grid[row][col + 1] == 1) {  // Evitar acessar fora dos limites
+                if (col < 19 && grid[row][col + 1] == 1) {
                     QTransform transform;
                     transform.rotate(-90);
                     pixmap = pixmap.transformed(transform);
+                } else if (col > 0 && grid[row][col - 1] == 1) {
+                    QTransform transform;
+                    transform.rotate(90);
+                    pixmap = pixmap.transformed(transform);
                 }
 
-                // Atualiza o pixmap do QLabel
-                gridLabels[row][col]->setPixmap(pixmap);
-                gridLabels[row][col]->repaint();
+                // Debug: Verifica a posição atualizada
+                qDebug() << "Updating path pixmap at position:" << row << "," << col;
+
+                gridItems[row][col]->setPixmap(pixmap);
             }
         }
     }
