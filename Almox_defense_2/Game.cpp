@@ -181,7 +181,7 @@ void Game::mousePressEvent(QMouseEvent *event) {
 }
 
 void Game::mouseMoveEvent(QMouseEvent *event) {
-    qDebug() << "Mouse moved";
+    //qDebug() << "Mouse moved";
     if (selectedTower) {
         QPointF scenePos = mapToScene(event->pos());
         selectedTower->setPos(scenePos - QPointF(selectedTower->boundingRect().width() / 2, selectedTower->boundingRect().height() / 2));
@@ -284,7 +284,7 @@ void Game::updatePathPixmap() {
                 }
 
                 // Debug: Verifica a posição atualizada
-                qDebug() << "Updating path pixmap at position:" << row << "," << col;
+                //qDebug() << "Updating path pixmap at position:" << row << "," << col;
 
                 gridItems[row][col]->setPixmap(pixmap);
             }

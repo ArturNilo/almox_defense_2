@@ -27,6 +27,10 @@ Enemy::Enemy(Game *gameInstance, QGraphicsItem *parent) : QGraphicsPixmapItem(pa
         points = gameInstance->pathPoints;  // Acessa os pontos de caminho do jogo
         point_index = 0;
         dest = points[0];
+
+        // Definir a posição inicial do inimigo
+        setPos(dest);
+
         rotate_to_point(dest);
     } else {
         qDebug() << "pathPoints está vazia!";
@@ -34,11 +38,9 @@ Enemy::Enemy(Game *gameInstance, QGraphicsItem *parent) : QGraphicsPixmapItem(pa
     }
 
     QTimer* timer = new QTimer(this);
-
     connect(timer, SIGNAL(timeout()), this, SLOT(move_forward()));
     timer->start(10);
 }
-
 
 void Enemy::rotate_to_point(QPointF p)
 {
