@@ -35,6 +35,7 @@ Tower::Tower(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     connect(timer, SIGNAL(timeout()), this, SLOT(aquire_target()));
     timer->start(attack_rate);
 
+    setZValue(10);
     // Define o destino de ataque
     //attack_dest = QPointF(400, 300);
 }
