@@ -16,16 +16,6 @@ set(TS_FILES Almox_defense_2_pt_BR.ts)
 
 set(PROJECT_SOURCES
         main.cpp
-
-
-
-        ${TS_FILES}
-)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Almox_defense_2
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
         Tower.h
         Tower.cpp
         Game.h
@@ -45,6 +35,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ResTower.cpp
         CapTower.cpp
         AcidTower.cpp
+        ${TS_FILES}
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(Almox_defense_2
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Almox_defense_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

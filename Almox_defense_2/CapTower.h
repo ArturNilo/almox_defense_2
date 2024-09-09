@@ -7,6 +7,7 @@ class CapTower : public Tower {
     Q_OBJECT
 public:
     CapTower(QGraphicsItem *parent = nullptr);
+
 };
 
 #endif // CAPTOWER_H
